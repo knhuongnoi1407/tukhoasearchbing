@@ -5,8 +5,11 @@ const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 dotenv.config();
+
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+
+app.use(cors()); // Cho phép GitHub Pages truy cập
 
 app.get("/keywords", async (req, res) => {
   try {
@@ -54,11 +57,10 @@ Tạo một danh sách 35 từ khóa tìm kiếm trên Bing bằng tiếng Việ
     const keywords = lines.filter(
       (line) =>
         line &&
-        !line.startsWith("**") && // bỏ **Tiêu đề**
-        !line.match(/^\*.*\*$/) && // bỏ *abc* hoặc **abc**
-        line.length <= 60 // độ dài ngắn gọn
+        !line.startsWith("**") &&
+        !line.match(/^\*.*\*$/) &&
+        line.length <= 60
     );
-  
 
     res.json({ keywords });
   } catch (err) {
@@ -67,6 +69,6 @@ Tạo một danh sách 35 từ khóa tìm kiếm trên Bing bằng tiếng Việ
   }
 });
 
-app.listen(3000, () => {
-  console.log("✅ Server đang chạy tại http://localhost:3000");
+app.listen(PORT, () => {
+  console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
 });
