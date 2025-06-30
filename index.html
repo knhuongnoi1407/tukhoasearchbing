@@ -187,7 +187,7 @@
     }
 
     async function fakeAIRequest() {
-        const res = await fetch("http://localhost:3000/keywords");
+        const res = await fetch("https://tukhoasearchbing.onrender.com/keywords");
         const data = await res.json();
         return data.keywords.slice(0, 36);
       }
