@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Từ Khóa Search Bing</title>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #2196f3;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      border-bottom: 4px solid #1976d2;
+    }
+
+    main {
+      flex: 1;
+      padding: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .generate {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .generate:hover {
+      background-color: #1976d2;
+      transform: scale(1.05);
+    }
+
+    .keyword-columns {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .keyword-box {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 50px;
+      box-sizing: border-box;
+      transition: box-shadow 0.3s;
+    }
+
+    .keyword-box:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .keyword-box span {
+      font-size: 14px;
+      color: #333;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+      flex-shrink: 0;
+      font-size: 13px;
+      transition: background-color 0.3s;
+    }
+
+    .copy-btn:hover {
+      background-color: #388e3c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #777;
+      background-color: #f8f8f8;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Gợi ý Từ khóa Tìm kiếm Bing bằng AI</h1>
+  </header>
+
+  <main>
+    <button class="generate" onclick="generateKeywords()">Lấy từ khóa mới</button>
+    <div class="keyword-columns">
+      <div class="column" id="col1"></div>
+      <div class="column" id="col2"></div>
+    </div>
+  </main>
+
+  <footer>
+    © Bản quyền thuộc bởi <strong>KN</strong>
+  </footer>
+
+  <script>
+    async function generateKeywords() {
+      const col1 = document.getElementById("col1");
+      const col2 = document.getElementById("col2");
+
+      col1.innerHTML = "<em>Đang tạo...</em>";
+      col2.innerHTML = "";
+
+      const keywords = await fakeAIRequest();
+
+      const half = Math.ceil(keywords.length / 2);
+      const col1Keywords = keywords.slice(0, half);
+      const col2Keywords = keywords.slice(half);
+
+      col1.innerHTML = "";
+      col2.innerHTML = "";
+
+      col1Keywords.forEach(keyword => col1.appendChild(createKeywordBox(keyword)));
+      col2Keywords.forEach(keyword => col2.appendChild(createKeywordBox(keyword)));
+    }
+
+    function createKeywordBox(keyword) {
+      const box = document.createElement("div");
+      box.className = "keyword-box";
+
+      const span = document.createElement("span");
+      span.textContent = keyword;
+
+      const button = document.createElement("button");
+      button.className = "copy-btn";
+      button.textContent = "Sao chép";
+      button.onclick = () => {
+        copyToClipboard(keyword);
+        button.textContent = "✓ Đã sao chép";
+        button.style.backgroundColor = "#ccc";
+        button.style.color = "#333";
+        button.style.cursor = "default";
+        button.disabled = true;
+      };
+      
+
+      box.appendChild(span);
+      box.appendChild(button);
+
+      return box;
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+    }
+
+    async function fakeAIRequest() {
+        const res = await fetch("http://localhost:3000/keywords");
+        const data = await res.json();
+        return data.keywords.slice(0, 36);
+      }
+  </script>
+
+</body>
+</html>
