@@ -20,7 +20,7 @@ app.get("/ping", (req, res) => {
 app.get("/keywords", async (req, res) => {
   try {
     const prompt = `
-Tạo một danh sách 35 từ khóa tìm kiếm trên Bing bằng tiếng Việt, đầy đủ, chỉ tiếng Việt không tiếng Anh, không trùng, đúng chính tả, theo xu hướng.
+Tạo một danh sách 35 từ khóa tìm kiếm trên Bing bằng tiếng Việt, đầy đủ, chỉ tiếng Việt không tiếng Anh, không trùng, đúng chính tả, tối thiểu 5 ký tự để microsoft không nhận nhầm là bot, theo xu hướng.
     `;
 
     const API_URL =
