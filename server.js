@@ -11,6 +11,12 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors()); // Cho phép GitHub Pages truy cập
 
+// ✅ Route mới để UptimeRobot ping Render mỗi 5 phút
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
+// Route chính lấy từ khóa
 app.get("/keywords", async (req, res) => {
   try {
     const prompt = `
@@ -45,7 +51,6 @@ Tạo một danh sách 35 từ khóa tìm kiếm trên Bing bằng tiếng Việ
       .split("\n")
       .map((line) => line.replace(/^\d+\.?\s*/, "").trim());
 
-    // Bỏ dòng đầu nếu chứa mô tả hoặc tiếng Anh
     if (
       lines[0]?.toLowerCase().includes("here are") ||
       lines[0]?.toLowerCase().includes("search keywords") ||
